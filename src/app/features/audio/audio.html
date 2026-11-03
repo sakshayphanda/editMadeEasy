@@ -1,0 +1,241 @@
+<main>
+  <a routerLink="/" class="back">← All tools</a>
+  <nav aria-label="Audio tools">
+    @for (item of tools; track item.id) {
+      <a
+        [routerLink]="['/audio', item.id]"
+        [attr.aria-current]="item.id === tool.id ? 'page' : null"
+      >
+        {{ item.title }}
+      </a>
+    }
+  </nav>
+
+  <header>
+    <p class="eyebrow">AUDIO TOOLS</p>
+    <h1>{{ tool.title }}</h1>
+    <p>{{ tool.description }}</p>
+    <p class="muted">Your files stay on your device. All downloads are MP3.</p>
+  </header>
+
+  <section class="panel" aria-label="Audio editor" [attr.aria-busy]="busy() !== null">
+    <label for="audio-file" class="file-label">Choose an audio file</label>
+    <input
+      id="audio-file"
+      type="file"
+      accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.flac,.webm"
+      [disabled]="busy() !== null"
+      (change)="loadFile($event)"
+      aria-describedby="file-help"
+    />
+    <p id="file-help" class="muted">
+      Up to 100 MB and 1 hour 30 minutes. Mono or stereo. Input format support depends on your
+      browser.
+    </p>
+
+    @if (file(); as original) {
+      <div class="source">
+        <h2>{{ original.name }}</h2>
+        <p class="muted">
+          {{ original.size / 1024 / 1024 | number: '1.2-2' }} MB ·
+          {{ formatTime(duration()) }}
+        </p>
+        <audio controls [src]="sourceUrl()" aria-label="Original audio"></audio>
+      </div>
+
+      <form (ngSubmit)="process()">
+        <fieldset [disabled]="busy() !== null">
+          <legend>Output settings</legend>
+          @switch (tool.id) {
+            @case ('denoise') {
+              <label for="noise-threshold">Noise reduction floor: {{ noiseThreshold() }} dB</label>
+              <input
+                id="noise-threshold"
+                name="noiseThreshold"
+                type="range"
+                min="-60"
+                max="-20"
+                step="5"
+                [ngModel]="noiseThreshold()"
+                (ngModelChange)="noiseThreshold.set($event); clearResult()"
+                aria-describedby="denoise-help"
+              />
+              <p id="denoise-help" class="muted">
+                Output: 192 kbps MP3. Automatically reduces steady broadband noise, including hiss
+                beneath louder audio. Move toward -20 dB for stronger reduction; quiet speech or
+                music may also become softer. Voices, clicks, and changing background sounds may
+                remain. Compare the previews before downloading.
+              </p>
+            }
+            @case ('converter') {
+              <p class="muted">
+                Output: 192 kbps MP3. Converts the full audio with its original volume. Conversion
+                may reduce audio quality.
+              </p>
+            }
+            @case ('compressor') {
+              <label for="target-size">File size up to</label>
+              <select
+                id="target-size"
+                name="targetSize"
+                [ngModel]="targetSizeMb()"
+                (ngModelChange)="targetSizeMb.set($event); clearResult()"
+                aria-describedby="target-size-help"
+              >
+                <option [ngValue]="null">No limit — choose bitrate</option>
+                @for (size of [1, 2, 4, 5, 10, 20]; track size) {
+                  <option [ngValue]="size">{{ size }} MB</option>
+                }
+              </select>
+              <p id="target-size-help" class="muted">
+                A size limit selects the bitrate automatically. Downloads will not exceed the
+                selected limit (1 MB = 1,000,000 bytes). If the audio cannot fit, choose a larger
+                limit or trim it first.
+              </p>
+              @if (targetSizeMb() === null) {
+                <label for="bitrate">MP3 bitrate</label>
+                <select
+                  id="bitrate"
+                  name="bitrate"
+                  [ngModel]="bitrate()"
+                  (ngModelChange)="bitrate.set($event); clearResult()"
+                >
+                  <option [ngValue]="64">64 kbps — smallest file</option>
+                  <option [ngValue]="96">96 kbps — smaller file</option>
+                  <option [ngValue]="128">128 kbps — balanced</option>
+                  <option [ngValue]="192">192 kbps — higher quality</option>
+                </select>
+              }
+              <p class="muted">
+                Lower bitrates reduce quality. An already compressed file may become larger.
+              </p>
+            }
+            @case ('volume') {
+              <label for="volume"
+                >Volume: {{ volume() }}% <span class="muted">(100% is original)</span></label
+              >
+              <input
+                id="volume"
+                name="volume"
+                type="range"
+                min="100"
+                max="300"
+                step="10"
+                [ngModel]="volume()"
+                (ngModelChange)="volume.set($event); clearResult()"
+              />
+              <p class="muted">
+                Output: MP3 with an automatic bitrate to try to keep the original file size. Larger
+                downloads require your confirmation. A lower bitrate may reduce quality. Boosts
+                quiet audio and softly limits loud peaks to avoid clipping. Strong boosts may change
+                the sound. Existing background noise will also become louder.
+              </p>
+            }
+            @case ('trimmer') {
+              <div class="times">
+                <div>
+                  <label for="start">Start (hh:mm:ss)</label>
+                  <input
+                    id="start"
+                    name="start"
+                    type="text"
+                    placeholder="00:00:00"
+                    pattern="[0-9]{2}:[0-5][0-9]:[0-5][0-9]"
+                    maxlength="8"
+                    required
+                    [ngModel]="startTime()"
+                    (ngModelChange)="updateTime($event, 'start')"
+                  />
+                </div>
+                <div>
+                  <label for="end">End (hh:mm:ss)</label>
+                  <input
+                    id="end"
+                    name="end"
+                    type="text"
+                    placeholder="00:00:00"
+                    pattern="[0-9]{2}:[0-5][0-9]:[0-5][0-9]"
+                    maxlength="8"
+                    required
+                    [ngModel]="endTime()"
+                    (ngModelChange)="updateTime($event, 'end')"
+                  />
+                </div>
+              </div>
+              @if (validRange()) {
+                <p class="muted">
+                  Selected: {{ formatTime(end() - start()) }} · Output: 192 kbps MP3.
+                </p>
+              } @else {
+                <p class="validation" role="status">
+                  Enter hh:mm:ss times within the audio duration, with start before end.
+                </p>
+              }
+            }
+          }
+          <button type="submit" [disabled]="tool.id === 'trimmer' && !validRange()">
+            {{ tool.action }}
+          </button>
+        </fieldset>
+      </form>
+    }
+
+    <div aria-live="polite" role="status">
+      @if (busy() === 'loading') {
+        <p>Reading your audio…</p>
+      }
+      @if (busy() === 'processing') {
+        <p>Processing your audio… This may take a moment.</p>
+      }
+    </div>
+    @if (error()) {
+      <p class="validation" role="alert">{{ error() }}</p>
+    }
+  </section>
+
+  @if (result(); as output) {
+    <section class="panel result" aria-label="Processed audio">
+      <h2>Your audio is ready</h2>
+      <p>Output size: {{ output.size / 1024 / 1024 | number: '1.2-2' }} MB</p>
+      @if (file(); as original) {
+        <p>Original size: {{ original.size / 1024 / 1024 | number: '1.2-2' }} MB</p>
+        @let difference = output.size - original.size;
+        @let change = difference < 0 ? -difference : difference;
+        @if (difference !== 0) {
+          <p>
+            File size {{ difference > 0 ? 'increased' : 'decreased' }} by
+            {{
+              (change >= 1048576 ? change / 1048576 : change >= 1024 ? change / 1024 : change)
+                | number: '1.0-2'
+            }}
+            {{ change >= 1048576 ? 'MB' : change >= 1024 ? 'KB' : 'bytes' }}
+            ({{ (change / original.size) * 100 | number: '1.0-2' }}%).
+          </p>
+        } @else {
+          <p>File size unchanged (0%).</p>
+        }
+        @if (tool.id === 'compressor' && output.size >= original.size) {
+          <p>This output is not smaller. Try a lower bitrate, or keep your original.</p>
+        }
+      }
+      <audio controls [src]="output.url" aria-label="Processed audio preview"></audio>
+      @let larger = output.size > (file()?.size ?? output.size);
+      @if (larger) {
+        <label for="allow-larger-download">
+          <input
+            id="allow-larger-download"
+            type="checkbox"
+            [ngModel]="allowLargerDownload()"
+            (ngModelChange)="allowLargerDownload.set($event)"
+          />
+          I agree to download this larger file.
+        </label>
+      }
+      @if (!larger || allowLargerDownload()) {
+        <a class="download" [href]="output.url" [download]="output.name">Download MP3</a>
+      } @else {
+        <button type="button" disabled>Download MP3</button>
+      }
+    </section>
+  }
+</main>

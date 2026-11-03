@@ -1,0 +1,52 @@
+<main>
+  <header>
+    <p class="eyebrow">YOUR EVERYDAY TOOLBOX</p>
+    <h1>Edit Made Easy</h1>
+    <p>Edit, convert, record, and create. All your file tools in one place.</p>
+    <nav aria-label="Tool categories">
+      @for (group of groups(); track group.id) {
+        <a [href]="'#' + group.id">{{ group.title }}</a>
+      }
+    </nav>
+    <label class="search" for="tool-search"
+      >Find a tool
+      <input
+        id="tool-search"
+        type="search"
+        placeholder="Try trim, merge, PDF, record…"
+        [ngModel]="query()"
+        (ngModelChange)="query.set($event)"
+      />
+    </label>
+    <p class="muted">
+      {{ count }} tools · Existing audio editors and recordings stay on your device. Other tools use
+      the processing server.
+    </p>
+  </header>
+  @for (group of groups(); track group.id) {
+    @if (group.tools.length) {
+      <section [id]="group.id" [attr.aria-labelledby]="group.id + '-heading'">
+        <h2 [id]="group.id + '-heading'">
+          <span class="icon" aria-hidden="true">{{ group.icon }}</span> {{ group.title }}
+        </h2>
+        <div class="tools">
+          @for (tool of group.tools; track tool.id) {
+            <a [routerLink]="['/', tool.group, tool.id]" class="tool">
+              <h3>{{ tool.title }}</h3>
+              <p>{{ tool.description }}</p>
+              <span>Open tool →</span>
+            </a>
+          }
+        </div>
+      </section>
+    }
+  }
+  @if (
+    !groups()[0].tools.length &&
+    !groups()[1].tools.length &&
+    !groups()[2].tools.length &&
+    !groups()[3].tools.length
+  ) {
+    <p role="status">No tools match “{{ query() }}”. Try another search.</p>
+  }
+</main>

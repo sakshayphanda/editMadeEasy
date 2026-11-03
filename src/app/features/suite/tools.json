@@ -1,0 +1,1199 @@
+[
+  {
+    "group": "video",
+    "id": "editor",
+    "title": "Video editor",
+    "description": "Trim, resize, rotate, adjust speed and volume, and export a video.",
+    "accept": "video/*,.mkv,.avi,.mov,.mp4,.webm",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "start",
+        "label": "Start (seconds)",
+        "default": 0,
+        "min": 0,
+        "max": 5400,
+        "step": 0.01,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "end",
+        "label": "End (seconds)",
+        "default": 10,
+        "min": 0.01,
+        "max": 5400,
+        "step": 0.01,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "width",
+        "label": "Width (pixels)",
+        "default": 640,
+        "min": 2,
+        "max": 3840,
+        "step": 2,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "height",
+        "label": "Height (pixels)",
+        "default": 360,
+        "min": 2,
+        "max": 2160,
+        "step": 2,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "speed",
+        "label": "Speed",
+        "default": 1,
+        "min": 0.25,
+        "max": 4,
+        "step": 0.05,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "volume",
+        "label": "Volume (%)",
+        "default": 100,
+        "min": 0,
+        "max": 300,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "rotation",
+        "label": "Rotation",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "type": "select",
+        "choices": [0, 90, 180, 270]
+      }
+    ],
+    "formats": ["mp4", "webm"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "video",
+    "id": "merge",
+    "title": "Merge videos",
+    "description": "Join videos in the order you choose.",
+    "accept": "video/*,.mkv,.avi,.mov,.mp4,.webm",
+    "multiple": true,
+    "fields": [
+      {
+        "key": "width",
+        "label": "Width (pixels)",
+        "default": 640,
+        "min": 2,
+        "max": 3840,
+        "step": 2,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "height",
+        "label": "Height (pixels)",
+        "default": 360,
+        "min": 2,
+        "max": 2160,
+        "step": 2,
+        "type": "number",
+        "choices": []
+      }
+    ],
+    "formats": ["mp4", "webm"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "video",
+    "id": "trim",
+    "title": "Trim video",
+    "description": "Keep a selected time range.",
+    "accept": "video/*,.mkv,.avi,.mov,.mp4,.webm",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "start",
+        "label": "Start (seconds)",
+        "default": 0,
+        "min": 0,
+        "max": 5400,
+        "step": 0.01,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "end",
+        "label": "End (seconds)",
+        "default": 10,
+        "min": 0.01,
+        "max": 5400,
+        "step": 0.01,
+        "type": "number",
+        "choices": []
+      }
+    ],
+    "formats": ["mp4", "webm"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "video",
+    "id": "add-audio",
+    "title": "Add audio to video",
+    "description": "Choose a video followed by an audio track to replace its sound.",
+    "accept": "video/*,.mkv,.avi,.mov,.mp4,.webm,audio/*,image/*",
+    "multiple": true,
+    "fields": [],
+    "formats": ["mp4", "webm"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "video",
+    "id": "add-image",
+    "title": "Add image to video",
+    "description": "Choose a video followed by an image overlay.",
+    "accept": "video/*,.mkv,.avi,.mov,.mp4,.webm,audio/*,image/*",
+    "multiple": true,
+    "fields": [
+      {
+        "key": "x",
+        "label": "Left (pixels)",
+        "default": 0,
+        "min": 0,
+        "max": 7680,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "y",
+        "label": "Top (pixels)",
+        "default": 0,
+        "min": 0,
+        "max": 4320,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "overlayWidth",
+        "label": "Image width (pixels)",
+        "default": 200,
+        "min": 2,
+        "max": 1920,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      }
+    ],
+    "formats": ["mp4", "webm"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "video",
+    "id": "add-text",
+    "title": "Add text to video",
+    "description": "Place a text caption over your video.",
+    "accept": "video/*,.mkv,.avi,.mov,.mp4,.webm",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "text",
+        "label": "Text",
+        "default": "",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "type": "textarea",
+        "choices": []
+      },
+      {
+        "key": "x",
+        "label": "Left (pixels)",
+        "default": 0,
+        "min": 0,
+        "max": 7680,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "y",
+        "label": "Top (pixels)",
+        "default": 0,
+        "min": 0,
+        "max": 4320,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "fontSize",
+        "label": "Font size",
+        "default": 36,
+        "min": 8,
+        "max": 160,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      }
+    ],
+    "formats": ["mp4", "webm"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "video",
+    "id": "remove-logo",
+    "title": "Remove logo from video",
+    "description": "Blend a rectangular logo area into its surroundings.",
+    "accept": "video/*,.mkv,.avi,.mov,.mp4,.webm",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "x",
+        "label": "Left (pixels)",
+        "default": 0,
+        "min": 0,
+        "max": 7680,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "y",
+        "label": "Top (pixels)",
+        "default": 0,
+        "min": 0,
+        "max": 4320,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "width",
+        "label": "Width (pixels)",
+        "default": 640,
+        "min": 2,
+        "max": 3840,
+        "step": 2,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "height",
+        "label": "Height (pixels)",
+        "default": 360,
+        "min": 2,
+        "max": 2160,
+        "step": 2,
+        "type": "number",
+        "choices": []
+      }
+    ],
+    "formats": ["mp4", "webm"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "video",
+    "id": "crop",
+    "title": "Crop video",
+    "description": "Keep a rectangle of your video.",
+    "accept": "video/*,.mkv,.avi,.mov,.mp4,.webm",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "x",
+        "label": "Left (pixels)",
+        "default": 0,
+        "min": 0,
+        "max": 7680,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "y",
+        "label": "Top (pixels)",
+        "default": 0,
+        "min": 0,
+        "max": 4320,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "width",
+        "label": "Width (pixels)",
+        "default": 640,
+        "min": 2,
+        "max": 3840,
+        "step": 2,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "height",
+        "label": "Height (pixels)",
+        "default": 360,
+        "min": 2,
+        "max": 2160,
+        "step": 2,
+        "type": "number",
+        "choices": []
+      }
+    ],
+    "formats": ["mp4", "webm"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "video",
+    "id": "rotate",
+    "title": "Rotate video",
+    "description": "Rotate clockwise by 90, 180, or 270 degrees.",
+    "accept": "video/*,.mkv,.avi,.mov,.mp4,.webm",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "rotation",
+        "label": "Rotation",
+        "default": 90,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "type": "select",
+        "choices": [90, 180, 270]
+      }
+    ],
+    "formats": ["mp4", "webm"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "video",
+    "id": "flip",
+    "title": "Flip video",
+    "description": "Mirror the video horizontally or vertically.",
+    "accept": "video/*,.mkv,.avi,.mov,.mp4,.webm",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "direction",
+        "label": "Direction",
+        "default": "horizontal",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "type": "select",
+        "choices": ["horizontal", "vertical"]
+      }
+    ],
+    "formats": ["mp4", "webm"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "video",
+    "id": "resize",
+    "title": "Resize video",
+    "description": "Set new output dimensions.",
+    "accept": "video/*,.mkv,.avi,.mov,.mp4,.webm",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "width",
+        "label": "Width (pixels)",
+        "default": 640,
+        "min": 2,
+        "max": 3840,
+        "step": 2,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "height",
+        "label": "Height (pixels)",
+        "default": 360,
+        "min": 2,
+        "max": 2160,
+        "step": 2,
+        "type": "number",
+        "choices": []
+      }
+    ],
+    "formats": ["mp4", "webm"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "video",
+    "id": "loop",
+    "title": "Loop video",
+    "description": "Repeat a video a chosen number of times.",
+    "accept": "video/*,.mkv,.avi,.mov,.mp4,.webm",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "loops",
+        "label": "Number of plays",
+        "default": 2,
+        "min": 2,
+        "max": 10,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      }
+    ],
+    "formats": ["mp4", "webm"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "video",
+    "id": "volume",
+    "title": "Change video volume",
+    "description": "Mute, lower, or increase the audio volume.",
+    "accept": "video/*,.mkv,.avi,.mov,.mp4,.webm",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "volume",
+        "label": "Volume (%)",
+        "default": 100,
+        "min": 0,
+        "max": 300,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      }
+    ],
+    "formats": ["mp4", "webm"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "video",
+    "id": "speed",
+    "title": "Change video speed",
+    "description": "Change playback speed while keeping audio pitch.",
+    "accept": "video/*,.mkv,.avi,.mov,.mp4,.webm",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "speed",
+        "label": "Speed",
+        "default": 1,
+        "min": 0.25,
+        "max": 4,
+        "step": 0.05,
+        "type": "number",
+        "choices": []
+      }
+    ],
+    "formats": ["mp4", "webm"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "video",
+    "id": "stabilize",
+    "title": "Stabilize video",
+    "description": "Reduce camera shake using motion compensation.",
+    "accept": "video/*,.mkv,.avi,.mov,.mp4,.webm",
+    "multiple": false,
+    "fields": [],
+    "formats": ["mp4", "webm"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "video",
+    "id": "screen-recorder",
+    "title": "Screen recorder",
+    "description": "Record, preview, and download directly in your browser.",
+    "accept": "",
+    "multiple": false,
+    "fields": [],
+    "formats": [],
+    "mode": "screen",
+    "engine": "browser"
+  },
+  {
+    "group": "video",
+    "id": "recorder",
+    "title": "Video recorder",
+    "description": "Record, preview, and download directly in your browser.",
+    "accept": "",
+    "multiple": false,
+    "fields": [],
+    "formats": [],
+    "mode": "camera",
+    "engine": "browser"
+  },
+  {
+    "group": "video",
+    "id": "text-to-speech",
+    "title": "Text to speech",
+    "description": "Turn text into a downloadable spoken audio file.",
+    "accept": "",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "text",
+        "label": "Text",
+        "default": "",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "type": "textarea",
+        "choices": []
+      }
+    ],
+    "formats": ["wav"],
+    "mode": "server",
+    "engine": "speech"
+  },
+  {
+    "group": "audio",
+    "id": "editor",
+    "title": "Audio editor",
+    "description": "Trim audio, add fades, change volume, speed and pitch, or create a ringtone.",
+    "accept": "audio/*,video/*,.mp3,.wav,.m4a,.flac,.ogg,.mp4",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "start",
+        "label": "Start (seconds)",
+        "default": 0,
+        "min": 0,
+        "max": 5400,
+        "step": 0.01,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "end",
+        "label": "End (seconds)",
+        "default": 10,
+        "min": 0.01,
+        "max": 5400,
+        "step": 0.01,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "volume",
+        "label": "Volume (%)",
+        "default": 100,
+        "min": 0,
+        "max": 300,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "speed",
+        "label": "Speed",
+        "default": 1,
+        "min": 0.25,
+        "max": 4,
+        "step": 0.05,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "pitch",
+        "label": "Pitch (semitones)",
+        "default": 0,
+        "min": -12,
+        "max": 12,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "fadeIn",
+        "label": "Fade in (seconds)",
+        "default": 0,
+        "min": 0,
+        "max": 30,
+        "step": 0.1,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "fadeOut",
+        "label": "Fade out (seconds)",
+        "default": 0,
+        "min": 0,
+        "max": 30,
+        "step": 0.1,
+        "type": "number",
+        "choices": []
+      }
+    ],
+    "formats": ["mp3", "wav", "flac", "ogg", "m4a"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "audio",
+    "id": "speed",
+    "title": "Change audio speed",
+    "description": "Change tempo while preserving pitch.",
+    "accept": "audio/*,video/*,.mp3,.wav,.m4a,.flac,.ogg,.mp4",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "speed",
+        "label": "Speed",
+        "default": 1,
+        "min": 0.25,
+        "max": 4,
+        "step": 0.05,
+        "type": "number",
+        "choices": []
+      }
+    ],
+    "formats": ["mp3", "wav", "flac", "ogg", "m4a"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "audio",
+    "id": "pitch",
+    "title": "Change audio pitch",
+    "description": "Shift pitch without changing duration.",
+    "accept": "audio/*,video/*,.mp3,.wav,.m4a,.flac,.ogg,.mp4",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "pitch",
+        "label": "Pitch (semitones)",
+        "default": 0,
+        "min": -12,
+        "max": 12,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      }
+    ],
+    "formats": ["mp3", "wav", "flac", "ogg", "m4a"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "audio",
+    "id": "equalizer",
+    "title": "Audio equalizer",
+    "description": "Adjust bass, midrange, and treble.",
+    "accept": "audio/*,video/*,.mp3,.wav,.m4a,.flac,.ogg,.mp4",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "bass",
+        "label": "Bass (dB)",
+        "default": 0,
+        "min": -20,
+        "max": 20,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "mid",
+        "label": "Midrange (dB)",
+        "default": 0,
+        "min": -20,
+        "max": 20,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "treble",
+        "label": "Treble (dB)",
+        "default": 0,
+        "min": -20,
+        "max": 20,
+        "step": 1,
+        "type": "number",
+        "choices": []
+      }
+    ],
+    "formats": ["mp3", "wav", "flac", "ogg", "m4a"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "audio",
+    "id": "reverse",
+    "title": "Reverse audio",
+    "description": "Play an audio recording backwards.",
+    "accept": "audio/*,video/*,.mp3,.wav,.m4a,.flac,.ogg,.mp4",
+    "multiple": false,
+    "fields": [],
+    "formats": ["mp3", "wav", "flac", "ogg", "m4a"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "audio",
+    "id": "joiner",
+    "title": "Audio joiner",
+    "description": "Join audio files in your chosen order.",
+    "accept": "audio/*,video/*,.mp3,.wav,.m4a,.flac,.ogg,.mp4",
+    "multiple": true,
+    "fields": [],
+    "formats": ["mp3", "wav", "flac", "ogg", "m4a"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "audio",
+    "id": "extract",
+    "title": "Extract audio from video",
+    "description": "Save a video soundtrack as an audio file.",
+    "accept": "audio/*,video/*,.mp3,.wav,.m4a,.flac,.ogg,.mp4",
+    "multiple": false,
+    "fields": [],
+    "formats": ["mp3", "wav", "flac", "ogg", "m4a"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "audio",
+    "id": "ringtone",
+    "title": "Create a ringtone",
+    "description": "Select up to 40 seconds and export an iPhone ringtone.",
+    "accept": "audio/*,video/*,.mp3,.wav,.m4a,.flac,.ogg,.mp4",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "start",
+        "label": "Start (seconds)",
+        "default": 0,
+        "min": 0,
+        "max": 5400,
+        "step": 0.01,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "end",
+        "label": "End (seconds)",
+        "default": 30,
+        "min": 0.01,
+        "max": 5400,
+        "step": 0.01,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "fadeIn",
+        "label": "Fade in (seconds)",
+        "default": 0,
+        "min": 0,
+        "max": 10,
+        "step": 0.1,
+        "type": "number",
+        "choices": []
+      },
+      {
+        "key": "fadeOut",
+        "label": "Fade out (seconds)",
+        "default": 1,
+        "min": 0,
+        "max": 10,
+        "step": 0.1,
+        "type": "number",
+        "choices": []
+      }
+    ],
+    "formats": ["m4r"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "audio",
+    "id": "recorder",
+    "title": "Voice recorder",
+    "description": "Record your microphone, listen back, and download.",
+    "accept": "",
+    "multiple": false,
+    "fields": [],
+    "formats": [],
+    "mode": "microphone",
+    "engine": "browser"
+  },
+  {
+    "group": "pdf",
+    "id": "split",
+    "title": "Split PDF",
+    "description": "Extract selected pages into a new PDF.",
+    "accept": "application/pdf",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "pages",
+        "label": "Pages (for example 1-3,5; blank means all)",
+        "default": "",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "type": "text",
+        "choices": []
+      }
+    ],
+    "formats": ["pdf"],
+    "mode": "server",
+    "engine": "python"
+  },
+  {
+    "group": "pdf",
+    "id": "merge",
+    "title": "Merge PDFs",
+    "description": "Combine PDFs in the order you choose.",
+    "accept": "application/pdf",
+    "multiple": true,
+    "fields": [],
+    "formats": ["pdf"],
+    "mode": "server",
+    "engine": "python"
+  },
+  {
+    "group": "pdf",
+    "id": "compress",
+    "title": "Compress PDF",
+    "description": "Compress PDF streams and optimize embedded images. Results depend on the source.",
+    "accept": "application/pdf",
+    "multiple": false,
+    "fields": [],
+    "formats": ["pdf"],
+    "mode": "server",
+    "engine": "python"
+  },
+  {
+    "group": "pdf",
+    "id": "unlock",
+    "title": "Unlock PDF",
+    "description": "Remove password protection using the current password.",
+    "accept": "application/pdf",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "password",
+        "label": "PDF password",
+        "default": "",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "type": "password",
+        "choices": []
+      }
+    ],
+    "formats": ["pdf"],
+    "mode": "server",
+    "engine": "python"
+  },
+  {
+    "group": "pdf",
+    "id": "protect",
+    "title": "Protect PDF",
+    "description": "Encrypt a PDF with a password.",
+    "accept": "application/pdf",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "password",
+        "label": "PDF password",
+        "default": "",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "type": "password",
+        "choices": []
+      }
+    ],
+    "formats": ["pdf"],
+    "mode": "server",
+    "engine": "python"
+  },
+  {
+    "group": "pdf",
+    "id": "rotate",
+    "title": "Rotate PDF",
+    "description": "Rotate selected pages clockwise.",
+    "accept": "application/pdf",
+    "multiple": false,
+    "fields": [
+      {
+        "key": "pages",
+        "label": "Pages (for example 1-3,5; blank means all)",
+        "default": "",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "type": "text",
+        "choices": []
+      },
+      {
+        "key": "rotation",
+        "label": "Rotation",
+        "default": 90,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "type": "select",
+        "choices": [90, 180, 270]
+      }
+    ],
+    "formats": ["pdf"],
+    "mode": "server",
+    "engine": "python"
+  },
+  {
+    "group": "pdf",
+    "id": "page-numbers",
+    "title": "Add page numbers",
+    "description": "Add page numbers at the bottom of every page.",
+    "accept": "application/pdf",
+    "multiple": false,
+    "fields": [],
+    "formats": ["pdf"],
+    "mode": "server",
+    "engine": "python"
+  },
+  {
+    "group": "pdf",
+    "id": "to-word",
+    "title": "PDF to Word",
+    "description": "Extract editable text into Word. Complex layouts and scanned pages need manual review.",
+    "accept": "application/pdf",
+    "multiple": false,
+    "fields": [],
+    "formats": ["docx"],
+    "mode": "server",
+    "engine": "python"
+  },
+  {
+    "group": "pdf",
+    "id": "to-excel",
+    "title": "PDF to Excel",
+    "description": "Extract detected tables into an Excel workbook. Scans require OCR first.",
+    "accept": "application/pdf",
+    "multiple": false,
+    "fields": [],
+    "formats": ["xlsx"],
+    "mode": "server",
+    "engine": "python"
+  },
+  {
+    "group": "pdf",
+    "id": "to-jpg",
+    "title": "PDF to JPG",
+    "description": "Export every page as a JPG in a ZIP archive.",
+    "accept": "application/pdf",
+    "multiple": false,
+    "fields": [],
+    "formats": ["zip"],
+    "mode": "server",
+    "engine": "python"
+  },
+  {
+    "group": "pdf",
+    "id": "to-png",
+    "title": "PDF to PNG",
+    "description": "Export every page as a PNG in a ZIP archive.",
+    "accept": "application/pdf",
+    "multiple": false,
+    "fields": [],
+    "formats": ["zip"],
+    "mode": "server",
+    "engine": "python"
+  },
+  {
+    "group": "pdf",
+    "id": "to-html",
+    "title": "PDF to HTML",
+    "description": "Export positioned page text and images in an HTML document.",
+    "accept": "application/pdf",
+    "multiple": false,
+    "fields": [],
+    "formats": ["html"],
+    "mode": "server",
+    "engine": "python"
+  },
+  {
+    "group": "pdf",
+    "id": "word-to-pdf",
+    "title": "Word to PDF",
+    "description": "Convert a Word document into a PDF.",
+    "accept": ".doc,.docx,.odt,.rtf",
+    "multiple": false,
+    "fields": [],
+    "formats": ["pdf"],
+    "mode": "server",
+    "engine": "office"
+  },
+  {
+    "group": "pdf",
+    "id": "excel-to-pdf",
+    "title": "Excel to PDF",
+    "description": "Convert a workbook into PDF pages.",
+    "accept": ".xls,.xlsx,.ods",
+    "multiple": false,
+    "fields": [],
+    "formats": ["pdf"],
+    "mode": "server",
+    "engine": "office"
+  },
+  {
+    "group": "pdf",
+    "id": "ppt-to-pdf",
+    "title": "PowerPoint to PDF",
+    "description": "Convert presentation slides into a PDF.",
+    "accept": ".ppt,.pptx,.odp",
+    "multiple": false,
+    "fields": [],
+    "formats": ["pdf"],
+    "mode": "server",
+    "engine": "office"
+  },
+  {
+    "group": "pdf",
+    "id": "jpg-to-pdf",
+    "title": "JPG to PDF",
+    "description": "Combine JPG images into PDF pages.",
+    "accept": "image/jpeg",
+    "multiple": true,
+    "fields": [],
+    "formats": ["pdf"],
+    "mode": "server",
+    "engine": "python"
+  },
+  {
+    "group": "pdf",
+    "id": "png-to-pdf",
+    "title": "PNG to PDF",
+    "description": "Combine PNG images into PDF pages.",
+    "accept": "image/png",
+    "multiple": true,
+    "fields": [],
+    "formats": ["pdf"],
+    "mode": "server",
+    "engine": "python"
+  },
+  {
+    "group": "convert",
+    "id": "audio",
+    "title": "Audio converter",
+    "description": "Convert audio and video soundtracks into popular audio formats.",
+    "accept": "audio/*,video/*,.mp3,.wav,.m4a,.flac,.ogg,.mp4",
+    "multiple": false,
+    "fields": [],
+    "formats": ["mp3", "wav", "flac", "ogg", "m4a", "m4r"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "convert",
+    "id": "video",
+    "title": "Video converter",
+    "description": "Convert video to MP4, WebM, MOV, MKV, or GIF.",
+    "accept": "video/*,.mkv,.avi,.mov,.mp4,.webm",
+    "multiple": false,
+    "fields": [],
+    "formats": ["mp4", "webm", "mov", "mkv", "gif"],
+    "mode": "server",
+    "engine": "ffmpeg"
+  },
+  {
+    "group": "convert",
+    "id": "image",
+    "title": "Image converter",
+    "description": "Convert raster images, including animated formats as a still frame. Transparency is flattened for JPEG.",
+    "accept": "image/*,.heic,.tif,.tiff",
+    "multiple": false,
+    "fields": [],
+    "formats": ["png", "jpg", "webp", "gif", "bmp", "tiff"],
+    "mode": "server",
+    "engine": "python"
+  },
+  {
+    "group": "convert",
+    "id": "document",
+    "title": "Document converter",
+    "description": "Convert documents to PDF, Word, OpenDocument, RTF, text, or HTML.",
+    "accept": ".doc,.docx,.odt,.rtf,.txt,.html",
+    "multiple": false,
+    "fields": [],
+    "formats": ["pdf", "docx", "odt", "rtf", "txt", "html"],
+    "mode": "server",
+    "engine": "office"
+  },
+  {
+    "group": "convert",
+    "id": "font",
+    "title": "Font converter",
+    "description": "Convert TrueType/OpenType fonts to web fonts or restore their native container. Font outlines are preserved.",
+    "accept": ".ttf,.otf,.woff,.woff2",
+    "multiple": false,
+    "fields": [],
+    "formats": ["woff", "woff2", "native"],
+    "mode": "server",
+    "engine": "python"
+  },
+  {
+    "group": "convert",
+    "id": "archive",
+    "title": "Archive converter",
+    "description": "Convert ZIP and TAR archives into either format.",
+    "accept": ".zip,.tar,.tar.gz,.tgz",
+    "multiple": false,
+    "fields": [],
+    "formats": ["zip", "tar"],
+    "mode": "server",
+    "engine": "python"
+  },
+  {
+    "group": "convert",
+    "id": "ebook",
+    "title": "Ebook converter",
+    "description": "Convert ebooks between EPUB, MOBI, AZW3, text, and PDF.",
+    "accept": ".epub,.mobi,.azw3,.fb2,.txt,.html",
+    "multiple": false,
+    "fields": [],
+    "formats": ["epub", "mobi", "azw3", "txt", "pdf"],
+    "mode": "server",
+    "engine": "ebook"
+  },
+  {
+    "group": "convert",
+    "id": "extract",
+    "title": "Archive extractor",
+    "description": "Unpack an archive and download its files in a standard ZIP.",
+    "accept": ".zip,.tar,.gz,.tgz,.7z,.rar",
+    "multiple": false,
+    "fields": [],
+    "formats": ["zip"],
+    "mode": "server",
+    "engine": "archive"
+  }
+]

@@ -1,0 +1,302 @@
+<main>
+  <a routerLink="/" class="back">← All tools</a>
+  <header>
+    <p class="eyebrow">
+      {{ tool.group === 'convert' ? 'CONVERTERS' : tool.group.toUpperCase() + ' TOOLS' }}
+    </p>
+    <h1>{{ tool.title }}</h1>
+    <p>{{ tool.description }}</p>
+  </header>
+  @if (tool.mode === 'server') {
+    <p class="notice">
+      Files are uploaded to this app’s processing server and deleted after the request. Up to 100 MB
+      total, 20 files, and 90 minutes of media.
+    </p>
+    @if (checking()) {
+      <p role="status">Checking tool availability…</p>
+    }
+    @if (unavailable()) {
+      <p class="error" role="alert">{{ unavailable() }}</p>
+    }
+    <section
+      class="panel"
+      (dragover)="$event.preventDefault()"
+      (drop)="drop($event)"
+      [attr.aria-busy]="busy()"
+    >
+      <form (ngSubmit)="process()">
+        <fieldset [disabled]="busy() || checking() || !!unavailable()">
+          <legend class="sr-only">{{ tool.title }} settings</legend>
+          @if (tool.id !== 'text-to-speech') {
+            <div class="upload">
+              <label for="suite-files">{{
+                tool.multiple ? 'Choose files' : 'Choose a file'
+              }}</label>
+              <input
+                id="suite-files"
+                type="file"
+                [accept]="tool.accept"
+                [multiple]="tool.multiple"
+                (change)="choose($event)"
+              />
+              <p>
+                or drag and drop here{{
+                  tool.multiple ? ' · Files are processed from top to bottom' : ''
+                }}
+              </p>
+            </div>
+          }
+          @if (files().length) {
+            <ol class="files">
+              @for (file of files(); track $index; let i = $index) {
+                <li>
+                  <span
+                    >{{ file.name }}
+                    <small>{{ file.size / 1048576 | number: '1.2-2' }} MB</small></span
+                  >
+                  @if (tool.multiple) {
+                    <button
+                      type="button"
+                      [disabled]="i === 0"
+                      (click)="move(i, -1)"
+                      [attr.aria-label]="'Move ' + file.name + ' up'"
+                    >
+                      ↑
+                    </button>
+                    <button
+                      type="button"
+                      [disabled]="i === files().length - 1"
+                      (click)="move(i, 1)"
+                      [attr.aria-label]="'Move ' + file.name + ' down'"
+                    >
+                      ↓
+                    </button>
+                  }
+                  <button
+                    type="button"
+                    (click)="remove(i)"
+                    [attr.aria-label]="'Remove ' + file.name"
+                  >
+                    Remove
+                  </button>
+                </li>
+              }
+            </ol>
+            @if (tool.group === 'video' || (tool.group === 'convert' && tool.id === 'video')) {
+              <video
+                #sourceMedia
+                controls
+                [src]="source()"
+                (loadedmetadata)="loadedMetadata($event)"
+                (timeupdate)="timeUpdate()"
+                aria-label="Original video"
+              ></video>
+            } @else if (
+              tool.group === 'audio' || (tool.group === 'convert' && tool.id === 'audio')
+            ) {
+              @if (waveform().length) {
+                <div class="waveform" role="img" aria-label="Audio waveform">
+                  @for (peak of waveform(); track $index) {
+                    <i
+                      [style.height.%]="peak"
+                      [style.opacity]="
+                        settings['start'] !== undefined &&
+                        (($index / 180) * duration() < +settings['start'] ||
+                          ($index / 180) * duration() > +settings['end'])
+                          ? 0.25
+                          : 1
+                      "
+                    ></i>
+                  }
+                </div>
+              }
+              <audio
+                #sourceMedia
+                controls
+                [src]="source()"
+                (loadedmetadata)="loadedMetadata($event)"
+                (timeupdate)="timeUpdate()"
+                aria-label="Original audio"
+              ></audio>
+            } @else if (tool.group === 'convert' && tool.id === 'image') {
+              <img [src]="source()" alt="Original image" />
+            }
+            @if (duration() > 0) {
+              <p>Duration: {{ duration() | number: '1.2-2' }} seconds</p>
+            }
+            @if (duration() > 0 && settings['start'] !== undefined) {
+              <div class="selection">
+                <label for="selection-start">Selection start: {{ settings['start'] }} s</label>
+                <input
+                  id="selection-start"
+                  type="range"
+                  min="0"
+                  [max]="duration()"
+                  step="0.01"
+                  name="selectionStart"
+                  [(ngModel)]="settings['start']"
+                  (ngModelChange)="clearOutput()"
+                />
+                <label for="selection-end">Selection end: {{ settings['end'] }} s</label>
+                <input
+                  id="selection-end"
+                  type="range"
+                  min="0"
+                  [max]="duration()"
+                  step="0.01"
+                  name="selectionEnd"
+                  [(ngModel)]="settings['end']"
+                  (ngModelChange)="clearOutput()"
+                />
+                <button type="button" (click)="previewSelection()">Play selection</button>
+              </div>
+            }
+          }
+          <div class="settings">
+            @for (field of tool.fields; track field.key) {
+              <label [for]="field.key"
+                >{{ field.label }}
+                @if (field.type === 'textarea') {
+                  <textarea
+                    [id]="field.key"
+                    [name]="field.key"
+                    [ngModel]="settings[field.key]"
+                    (ngModelChange)="updateSetting(field, $event)"
+                    rows="4"
+                    maxlength="5000"
+                    required
+                  ></textarea>
+                } @else if (field.type === 'select') {
+                  <select
+                    [id]="field.key"
+                    [name]="field.key"
+                    [ngModel]="settings[field.key]"
+                    (ngModelChange)="updateSetting(field, $event)"
+                  >
+                    @for (choice of field.choices; track choice) {
+                      <option [ngValue]="choice">{{ choice }}</option>
+                    }
+                  </select>
+                } @else {
+                  <input
+                    [id]="field.key"
+                    [name]="field.key"
+                    [type]="field.type"
+                    [min]="field.min"
+                    [max]="field.max"
+                    [step]="field.step"
+                    [ngModel]="settings[field.key]"
+                    (ngModelChange)="updateSetting(field, $event)"
+                    [required]="field.type === 'number' || field.type === 'password'"
+                    [attr.autocomplete]="field.type === 'password' ? 'off' : null"
+                  />
+                }
+              </label>
+            }
+            @if (tool.formats.length > 1) {
+              <label for="format"
+                >Output format
+                <select
+                  id="format"
+                  name="format"
+                  [ngModel]="format()"
+                  (ngModelChange)="format.set($event); clearOutput()"
+                >
+                  @for (item of tool.formats; track item) {
+                    <option [value]="item">{{ item.toUpperCase() }}</option>
+                  }
+                </select>
+              </label>
+            }
+          </div>
+          <button
+            class="primary"
+            type="submit"
+            [disabled]="!files().length && tool.id !== 'text-to-speech'"
+          >
+            Process {{ tool.group === 'convert' ? 'file' : tool.group }}
+          </button>
+        </fieldset>
+      </form>
+      @if (busy()) {
+        <p role="status">Processing… Please keep this page open.</p>
+        <button type="button" (click)="cancel()">Cancel</button>
+      }
+    </section>
+  } @else {
+    <section class="panel">
+      <p>Your recording stays on your device. Your browser will ask for permission.</p>
+      @if (tool.mode !== 'microphone') {
+        <video #liveVideo autoplay muted playsinline aria-label="Live recording preview"></video>
+      }
+      @if (recording()) {
+        <p role="status" class="recording">● Recording</p>
+        <button class="primary" type="button" (click)="stopRecording()">Stop recording</button>
+      } @else {
+        <button class="primary" type="button" [disabled]="busy()" (click)="startRecording()">
+          Start recording
+        </button>
+      }
+      <p class="muted">
+        Downloads use your browser’s supported recording format. Screen audio availability depends
+        on the browser and selected source. Recording stops at approximately 100 MB.
+      </p>
+    </section>
+  }
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+  @if (output(); as result) {
+    <section class="panel result" aria-label="Processed file">
+      <h2>Your file is ready</h2>
+      <p>{{ result.name }} · {{ result.size / 1048576 | number: '1.2-2' }} MB</p>
+      @let originalSize = originalBytes();
+      @if (originalSize > 0) {
+        <p>Original size: {{ originalSize / 1048576 | number: '1.2-2' }} MB</p>
+        @let difference = result.size - originalSize;
+        @if (difference === 0) {
+          <p>File size unchanged (0%).</p>
+        } @else {
+          <p>
+            File size {{ difference > 0 ? 'increased' : 'decreased' }} by
+            {{ (difference > 0 ? difference : -difference) / 1024 | number: '1.2-2' }} KB ({{
+              ((difference > 0 ? difference : -difference) / originalSize) * 100 | number: '1.0-2'
+            }}%).
+          </p>
+        }
+      }
+
+      @if (result.type.startsWith('audio/')) {
+        <audio controls [src]="result.url" aria-label="Processed audio"></audio>
+      }
+      @if (result.type.startsWith('video/')) {
+        <video controls [src]="result.url" aria-label="Processed video"></video>
+      }
+      @if (result.type.startsWith('image/')) {
+        <img [src]="result.url" alt="Processed image" />
+      }
+      @if (files().length === 1 && result.size > files()[0].size) {
+        <p>The output is larger than the original. Conversion does not always reduce file size.</p>
+      }
+      @let largerAudio =
+        result.type.startsWith('audio/') && originalSize > 0 && result.size > originalSize;
+      @if (largerAudio) {
+        <label class="confirm-larger">
+          <input
+            type="checkbox"
+            [ngModel]="allowLargerDownload()"
+            (ngModelChange)="allowLargerDownload.set($event)"
+          />
+          I agree to download this larger audio file.
+        </label>
+      }
+      @if (!largerAudio || allowLargerDownload()) {
+        <a class="primary download" [href]="result.url" [download]="result.name"
+          >Download {{ result.name.split('.').pop()?.toUpperCase() }}</a
+        >
+      } @else {
+        <button class="primary" disabled>Download audio</button>
+      }
+    </section>
+  }
+</main>

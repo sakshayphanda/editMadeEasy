@@ -1,0 +1,75 @@
+<main>
+  <a routerLink="/" class="back">← All tools</a>
+  <nav aria-label="Audio tools">
+    @for (item of tools; track item.id) {
+      <a
+        [routerLink]="['/audio', item.id]"
+        [attr.aria-current]="item.id === 'youtube' ? 'page' : null"
+        >{{ item.title }}</a
+      >
+    }
+  </nav>
+  <header>
+    <p class="eyebrow">AUDIO TOOLS</p>
+    <h1>YouTube audio downloader</h1>
+    <p>Download audio from a YouTube video as MP3 at your preferred bitrate.</p>
+    <p class="muted">
+      Your video link is sent to Samplecut for extraction. Free service: up to 60 minutes per video
+      and 10 requests per 10 minutes shared by this server. Availability may vary.
+    </p>
+  </header>
+  <section class="panel" aria-label="YouTube audio downloader" [attr.aria-busy]="busy()">
+    <form (ngSubmit)="download()">
+      <fieldset [disabled]="busy()">
+        <legend>Download settings</legend>
+        <label for="youtube-url">YouTube video URL</label>
+        <input
+          id="youtube-url"
+          name="url"
+          type="text"
+          inputmode="url"
+          placeholder="https://www.youtube.com/watch?v=…"
+          required
+          maxlength="2048"
+          [ngModel]="url()"
+          (ngModelChange)="url.set($event); clearResult()"
+        />
+        <p class="muted">Paste a single video or Shorts link.</p>
+        <label for="youtube-bitrate">MP3 bitrate</label>
+        <select
+          id="youtube-bitrate"
+          name="bitrate"
+          [ngModel]="bitrate()"
+          (ngModelChange)="bitrate.set($event); clearResult()"
+          aria-describedby="bitrate-help"
+        >
+          @for (rate of bitrates; track rate) {
+            <option [ngValue]="rate">{{ rate }} kbps</option>
+          }
+        </select>
+        <p id="bitrate-help" class="muted">
+          Lower bitrates make smaller files and reduce quality. 8–24 kbps uses mono. Higher bitrates
+          cannot improve the original audio quality.
+        </p>
+        <button type="submit" [disabled]="!url().trim()">Prepare MP3</button>
+      </fieldset>
+    </form>
+    <div aria-live="polite" role="status">
+      @if (busy()) {
+        <p>Preparing your audio… This can take a few minutes.</p>
+        <button type="button" (click)="cancel()">Cancel</button>
+      }
+    </div>
+    @if (error()) {
+      <p class="validation" role="alert">{{ error() }}</p>
+    }
+  </section>
+  @if (result(); as output) {
+    <section class="panel result" aria-label="Downloaded audio">
+      <h2>Your audio is ready</h2>
+      <p>{{ bitrate() }} kbps MP3 · {{ output.size / 1024 / 1024 | number: '1.2-2' }} MB</p>
+      <audio controls [src]="output.url" aria-label="Downloaded audio preview"></audio>
+      <a class="download" [href]="output.url" [download]="output.name">Download MP3</a>
+    </section>
+  }
+</main>

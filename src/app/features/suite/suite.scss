@@ -1,0 +1,218 @@
+:host {
+  display: block;
+}
+main {
+  max-width: 64rem;
+  margin: auto;
+  padding: 2rem 1.5rem 4rem;
+}
+a {
+  color: #2459a6;
+}
+.back {
+  text-decoration: none;
+}
+header {
+  text-align: center;
+  margin: 2.5rem 0 2rem;
+}
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin: 0.5rem 0 1rem;
+}
+p {
+  line-height: 1.6;
+}
+.eyebrow {
+  color: #2459a6;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+.panel {
+  background: white;
+  border: 1px solid #d8e0eb;
+  padding: clamp(1rem, 4vw, 2rem);
+  border-radius: 1rem;
+  margin: 1.5rem 0;
+}
+.notice {
+  background: #edf4ff;
+  padding: 1rem;
+  border-radius: 0.6rem;
+  color: #334d72;
+}
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.upload {
+  text-align: center;
+  border: 2px dashed #b6c7df;
+  border-radius: 0.8rem;
+  padding: 2rem 1rem;
+  background: #f5f8fc;
+}
+.upload label {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+input,
+select,
+textarea {
+  max-width: 100%;
+  font: inherit;
+}
+input:not([type='file']),
+select,
+textarea {
+  display: block;
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid #bac7d8;
+  border-radius: 0.4rem;
+  margin-top: 0.5rem;
+  background: white;
+  color: inherit;
+}
+input[type='range'] {
+  padding: 0;
+}
+.settings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1.3rem;
+  margin: 1.5rem 0;
+}
+.settings label {
+  font-weight: 600;
+}
+button,
+.primary {
+  display: inline-block;
+  font: inherit;
+  border: 1px solid #bac7d8;
+  border-radius: 0.45rem;
+  padding: 0.65rem 1rem;
+  background: white;
+  cursor: pointer;
+  color: #2459a6;
+  text-decoration: none;
+}
+.primary {
+  background: #2459a6;
+  color: white;
+  border-color: #2459a6;
+  margin-top: 1rem;
+}
+button:disabled,
+fieldset:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.files {
+  list-style: none;
+  padding: 0;
+}
+.files li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+.files span {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+small {
+  display: block;
+  color: #526075;
+}
+.files button {
+  padding: 0.4rem;
+  font-size: 0.85rem;
+}
+video,
+img {
+  display: block;
+  max-width: 100%;
+  max-height: 28rem;
+  margin: 1rem auto;
+  border-radius: 0.5rem;
+}
+video {
+  background: #111827;
+  width: 100%;
+}
+audio {
+  width: 100%;
+  margin: 1rem 0;
+}
+.error {
+  color: #a11c2f;
+  background: #fff1f2;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+.muted {
+  color: #526075;
+  font-size: 0.9rem;
+}
+.waveform {
+  display: flex;
+  gap: 2px;
+  height: 8rem;
+  align-items: center;
+  background: #edf4ff;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+.waveform i {
+  display: block;
+  background: #3873c4;
+  flex: 1;
+  min-width: 1px;
+}
+.selection {
+  background: #f5f8fc;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+.selection label {
+  display: block;
+  margin-top: 0.75rem;
+}
+.selection button {
+  margin-top: 1rem;
+}
+.recording {
+  color: #bd233c;
+  font-weight: 600;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.confirm-larger {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+.confirm-larger input[type='checkbox'] {
+  display: inline-block;
+  width: auto;
+  margin: 0;
+}

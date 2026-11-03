@@ -1,0 +1,142 @@
+:host {
+  display: block;
+}
+
+main {
+  max-width: 56rem;
+  margin-inline: auto;
+  padding: 2rem 1.5rem 4rem;
+}
+a {
+  color: #2459a6;
+}
+.back {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+}
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+}
+nav a {
+  padding-block: 0.5rem;
+}
+nav a[aria-current] {
+  font-weight: 700;
+  text-decoration-thickness: 3px;
+}
+header {
+  margin-block: 2.5rem 2rem;
+}
+.eyebrow {
+  color: #2459a6;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+h1 {
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  margin-block: 0.5rem 1rem;
+}
+h2 {
+  font-size: 1.2rem;
+  overflow-wrap: anywhere;
+}
+p {
+  line-height: 1.6;
+}
+.muted {
+  color: #526075;
+  font-size: 0.9rem;
+}
+.panel {
+  border: 1px solid #d8e0eb;
+  border-radius: 1rem;
+  padding: clamp(1rem, 4vw, 2rem);
+  background: #fff;
+}
+.panel + .panel {
+  margin-top: 1.5rem;
+}
+label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+input,
+select,
+button,
+.download {
+  font: inherit;
+}
+input[type='file'] {
+  width: 100%;
+}
+input::file-selector-button {
+  padding: 0.65rem;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+input[type='text'],
+select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #8795a8;
+  border-radius: 0.5rem;
+  background: #fff;
+  color: inherit;
+}
+input[type='range'] {
+  width: 100%;
+  accent-color: #2459a6;
+}
+.source {
+  margin-block: 2rem;
+}
+audio {
+  display: block;
+  width: 100%;
+  margin-block: 1rem;
+}
+fieldset {
+  margin: 0;
+  padding: 1.5rem 0 0;
+  border: 0;
+  border-top: 1px solid #d8e0eb;
+  min-width: 0;
+}
+legend {
+  padding-right: 0.75rem;
+  font-weight: 600;
+}
+.times {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+button,
+.download {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.85rem 1.25rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: #2459a6;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.validation {
+  color: #b42318;
+}
+@media (max-width: 420px) {
+  .times {
+    grid-template-columns: 1fr;
+  }
+}
